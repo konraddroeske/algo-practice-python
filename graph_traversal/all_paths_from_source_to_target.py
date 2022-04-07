@@ -1,6 +1,3 @@
-# convert list of lists to graph
-# using BFS, traverse and return paths from start to end
-
 def allPathsSourceTarget(graph: list[list[int]]) -> list[list[int]]:
     stack = []
     paths = []
@@ -19,7 +16,6 @@ def allPathsSourceTarget(graph: list[list[int]]) -> list[list[int]]:
             new_vert = (graph[new_index], vert[1] + [new_index])
             stack.append(new_vert)
 
-    print('paths', paths)
     return paths
 
 
