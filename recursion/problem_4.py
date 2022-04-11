@@ -27,10 +27,13 @@
 from collections import defaultdict
 
 visited = defaultdict(lambda: False)
+jug_1_max = 5
+jug_2_max = 3
+count = 0
 
 
 def buckets_recursive(jug_1: int, jug_2: int, val: int) -> bool:
-    if jug_1 + jug_2 == val:
+    if jug_1 + jug_2 == val or jug_1 == val or jug_2 == val:
         print(jug_1, jug_2)
         return True
 
@@ -44,18 +47,18 @@ def buckets_recursive(jug_1: int, jug_2: int, val: int) -> bool:
                 # empty jug 2
                 buckets_recursive(jug_1, 0, val) or
                 # fill jug 1
-                buckets_recursive(5, jug_2, val) or
+                buckets_recursive(jug_1_max, jug_2, val) or
                 # fill jug 2
-                buckets_recursive(jug_1, 3, val) or
+                buckets_recursive(jug_1, jug_2_max, val) or
                 # fill jug 2 from jug 1
                 buckets_recursive(
-                    jug_1 - min(jug_1, (3 - jug_2)),
-                    jug_2 + min(3 - jug_2, jug_1),
+                    jug_1 - min(jug_1, (jug_2_max - jug_2)),
+                    jug_2 + min(jug_2_max - jug_2, jug_1),
                     val) or
                 # fill jug 1 from jug 2
                 buckets_recursive(
-                    jug_1 + min(5 - jug_1, jug_2),
-                    jug_2 - min(jug_2, (5 - jug_1)),
+                    jug_1 + min(jug_1_max - jug_1, jug_2),
+                    jug_2 - min(jug_2, (jug_1_max - jug_1)),
                     val)
         )
     else:
