@@ -86,3 +86,4 @@ class BucketSolverGeneral:
 buckets = BucketSolverGeneral([5, 3, 2, 1, 10, 4])
 buckets.buckets_recursive([0, 0, 0, 0, 0, 0], 20)
 print(buckets.visited)
+print(len(buckets.visited))
