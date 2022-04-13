@@ -6,6 +6,7 @@ from typing import Optional
 class SudokuSolver:
     def __init__(self, initial_board: list[list[Optional[int]]]) -> None:
         self.board = initial_board
+        self.counter = 0
 
     def is_possible(self, y: int, x: int, val: Optional[int]) -> bool:
         # print('check row if it contains number')
@@ -30,22 +31,28 @@ class SudokuSolver:
         return True
 
     # possible next moves
-    def solve_recursion(self) -> None:
+    def solve_recursion(self) -> bool:
+        self.counter += 1
+
         for y in range(9):
             for x in range(9):
                 if self.board[y][x] is None:
                     for val in range(1, 10):
                         if self.is_possible(y, x, val):
                             self.board[y][x] = val
-                            self.solve_recursion()
 
-                            # Backtracking to correct incorrect solutions
+                            # Prevent unnecessary iterations by not continuing
+                            # if all values have been attempted
+                            if self.solve_recursion():
+                                return True
+
+                            # Backtracking to remove incorrect solutions
                             self.board[y][x] = None
 
-                    # Return once all values are attempted
-                    return None
+                    # Return false if all values attempted on every None element
+                    return False
 
-        print('board', board)
+        return True
 
 
 # https://www.websudoku.com/?level=1&set_id=6303889381
@@ -62,3 +69,5 @@ board = [[1, 8, 9, None, None, 5, None, 3, None],
 
 solver = SudokuSolver(board)
 solver.solve_recursion()
+print('final board', solver.board)
+print('final count', solver.counter)
