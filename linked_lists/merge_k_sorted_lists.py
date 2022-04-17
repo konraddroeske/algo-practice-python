@@ -1,5 +1,3 @@
-# Input: lists = []
-# Output: []
 from typing import Optional
 
 
@@ -9,10 +7,6 @@ class ListNode(object):
         self.next = next
 
     def __repr__(self):
-        # if self.next is not None:
-        #     return f'Val: {self.val}, Next: {self.val}'
-        #
-        # return f'Val: {self.val}, Next: {None}'
         return f'Val: {self.val}'
 
 
@@ -48,3 +42,6 @@ list_3 = ListNode(2, ListNode(3))
 
 result = merge_k_lists([list_1, list_2, list_3])
 result_2 = merge_k_lists([None])
+
+# whether we fill to the top, throw it out, or transfer.
+# so that we can have instructions on how to achieve the goal.
