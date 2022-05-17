@@ -28,7 +28,6 @@ print('finish', finish_1)
 def get_neighbours(board: list[list[str]], cur_pos: tuple[int, int]) \
         -> list[tuple[int, int]]:
     row, col = cur_pos
-
     neighbours = []
 
     # up
