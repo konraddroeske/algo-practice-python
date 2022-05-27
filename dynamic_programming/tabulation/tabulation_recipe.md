@@ -1,0 +1,6 @@
+- Visualize it as a table
+- Size of table based on inputs
+- Initialize the table with default values
+- Seed the trivial answer into the table
+- Iterate through the table
+- Fill further positions based on the current position
