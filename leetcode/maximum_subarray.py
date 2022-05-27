@@ -43,6 +43,7 @@ print(max_sum(nums_2))  # 1
 
 def max_sum_dp(nums: list[int]) -> int:
     dp = [0] * len(nums)
+
     for i, num in enumerate(nums):
         dp[i] = max(num, num + dp[i - 1])
 
