@@ -71,7 +71,7 @@ d = 0 (Constant)
 
 Case 1 - O(log n)
 
-### Example #3 - Interger Multiplication
+### Example #3 - Integer Multiplication
 
 a = 4
 b = 2
