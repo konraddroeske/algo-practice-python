@@ -30,7 +30,7 @@ def choose_pivot(arr: list[int], flag: int) -> int:
         return n - 1
 
     first = arr[0]
-    final = arr[n - 1]
+    final = arr[-1]
 
     if n % 2 != 0:
         k = n // 2
@@ -39,9 +39,7 @@ def choose_pivot(arr: list[int], flag: int) -> int:
         k = (n - 1) // 2
         middle = arr[k]
 
-    pivot_arr = [first, middle, final]
-
-    med = find_median(pivot_arr)
+    med = find_median([first, middle, final])
 
     if med == first:
         return 0
