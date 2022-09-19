@@ -26,7 +26,7 @@ RSelect(array A, length n, order statistic i)
     - let j = new index of p
 
 4. If j = i, return p
-5. if j > 1, return RSelect(1st Part of A, j - 1, i)
+5. if j > i, return RSelect(1st Part of A, j - 1, i)
 6. if j < i, return RSelect(2nd Part of A, n - j, i - j)
 
 Running Time:
