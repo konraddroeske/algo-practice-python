@@ -3,6 +3,7 @@
 
 nums_1 = [5, 4, 1, 8, 7, 2, 6, 3]
 nums_2 = [6, 5, 4, 3, 2, 1]
+nums_3 = [5, 3, 8, 9, 1, 7, 0, 2, 6, 4]
 
 
 def merge_sort(arr: list[int]) -> list[int]:
@@ -22,6 +23,9 @@ def merge_sort(arr: list[int]) -> list[int]:
     i = 0  # 1 operation
     j = 0  # 1 operation
 
+    print("left", left)
+    print("right", right)
+
     while i < len(left) and j < len(right):  # n operations
         if left[i] <= right[j]:  # 1 operation
             output.append(left[i])  # 1 operation
@@ -34,13 +38,16 @@ def merge_sort(arr: list[int]) -> list[int]:
     output += left[i:]  # n operations
     output += right[j:]  # n operations
 
+    print("final output", output)
+
     return output
 
     # Simplify to max 6n operations per merge
 
 
 # print(merge_sort(nums_1))
-print(merge_sort(nums_2))
+# print(merge_sort(nums_2))
+print(merge_sort(nums_3))
 
 # Analysis
 
