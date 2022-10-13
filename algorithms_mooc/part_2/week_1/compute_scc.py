@@ -50,10 +50,6 @@ with open("scc_input_test.txt") as f:
         else:
             rev_graph_dict[tail] = Node(tail, [head])
 
-    # print(max_val_orig)
-    # print(max_val_rev)
-    # print(max_val)
-
     test_graph: list[Optional[Node]] = [None] * max_val
     test_graph_rev: list[Optional[Node]] = [None] * max_val
 
@@ -62,39 +58,6 @@ with open("scc_input_test.txt") as f:
 
     for key, value in rev_graph_dict.items():
         test_graph_rev[key - 1] = value
-
-    # for index, node in enumerate(test_graph):
-    #     if node is None:
-    #         test_graph[index] = Node(index + 1, [])
-    #
-    # for index, node in enumerate(test_graph_rev):
-    #     if node is None:
-    #         test_graph_rev[index] = Node(index + 1, [])
-
-# print(test_graph)
-# test_graph = [
-#     Node(1, [4]),
-#     Node(2, [8]),
-#     Node(3, [6]),
-#     Node(4, [7]),
-#     Node(5, [2]),
-#     Node(6, [9]),
-#     Node(7, [1]),
-#     Node(8, [5, 6]),
-#     Node(9, [3, 7]),
-# ]
-#
-# test_graph_rev = [
-#     Node(1, [7]),
-#     Node(2, [5]),
-#     Node(3, [9]),
-#     Node(4, [1]),
-#     Node(5, [8]),
-#     Node(6, [3, 8]),
-#     Node(7, [9, 4]),
-#     Node(8, [2]),
-#     Node(9, [6]),
-# ]
 
 finishing_times: list[Optional[int]] = [None] * (len(test_graph_rev))
 t = 0
@@ -212,6 +175,7 @@ leaders = defaultdict(lambda: 0)
 for node in test_graph:
     leaders[node.leader] += 1
 
-result = sorted([(k, v) for k, v in leaders.items()], key=lambda x: x[1],
-                reverse=True)[:5]
+result = sorted([(k, v) for k, v in leaders.items()], key=lambda x: x[1], reverse=True)[
+    :5
+]
 print(result)
