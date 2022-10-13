@@ -47,7 +47,7 @@ def dijkstra(graph: list[list[tuple[int, int]]]) -> dict[int, int]:
                     prev_distance = a.get(tail)
 
                     if prev_distance is None:
-                        # print("can't get prev distance")
+                        print("can't get prev distance")
                         break
 
                     new_distance = cur_distance + prev_distance
