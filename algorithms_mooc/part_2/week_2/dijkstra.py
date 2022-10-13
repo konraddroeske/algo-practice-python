@@ -1,5 +1,5 @@
 with open("dijkstra_data.txt") as f:
-    test_vertices = []
+    input_vertices = []
 
     for line in f:
         split_line = str.split(line)
@@ -7,14 +7,14 @@ with open("dijkstra_data.txt") as f:
         new_edges = []
 
         for vals in split_line[1:]:
-            (new_vertex, new_distance) = str.split(vals, ",")
-            new_edges.append((int(new_vertex), int(new_distance)))
+            (input_vertex, input_distance) = str.split(vals, ",")
+            new_edges.append((int(input_vertex), int(input_distance)))
 
-        test_vertices.append(new_edges)
+        input_vertices.append(new_edges)
 #
 # print(all_vertices)
 
-# test_vertices = [
+# input_vertices = [
 #     [(2, 1), (3, 4)],
 #     [(3, 2), (4, 6)],
 #     [(4, 3)],
@@ -71,7 +71,7 @@ def dijkstra(graph: list[list[tuple[int, int]]]) -> dict[int, int]:
     return a
 
 
-d = dijkstra(test_vertices)
+d = dijkstra(input_vertices)
 
 # 7,37,59,82,99,115,133,165,188,197
 
