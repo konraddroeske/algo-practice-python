@@ -1,13 +1,6 @@
 from typing import Optional
 
-
-class ListNode:
-    def __init__(self, val: int = 0, next: "ListNode" = None) -> None:
-        self.val = val
-        self.next = next
-
-    def __repr__(self) -> str:
-        return f"ListNode(val={self.val}, next={self.next})"
+from leetcode.linked_list.list_node import ListNode
 
 
 def reverse_linked_list(head: Optional[ListNode]) -> Optional[ListNode]:

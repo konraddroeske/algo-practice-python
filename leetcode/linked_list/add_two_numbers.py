@@ -1,10 +1,6 @@
 from typing import Optional
 
-
-class ListNode:
-    def __init__(self, val: int = 0, next=None):
-        self.val = val
-        self.next: Optional[ListNode] = next
+from leetcode.linked_list.list_node import ListNode
 
 
 # 1 - Brute Force
@@ -12,6 +8,7 @@ class ListNode:
 # add, then return as linked lists
 
 # Time Complexity = n
+
 
 def add_two_numbers(l1: ListNode, l2: ListNode) -> ListNode:
     num_1 = ""
@@ -72,6 +69,7 @@ input_l2 = input_l2_arr[0]
 
 # 2 - Use Math and use the Carry
 
+
 def add_two_numbers_carry(l1: ListNode, l2: ListNode) -> ListNode:
     dummy_head = ListNode(0)
     curr = dummy_head
@@ -105,5 +103,5 @@ result = add_two_numbers_carry(input_l1, input_l2)
 
 # for node in result:
 while result:
-    print('val', result.val)
+    print("val", result.val)
     result = result.next
