@@ -9,7 +9,6 @@ def min_avg_search_time(keys: list[float]) -> list[list[float]]:
 
             sub_problems = []
 
-            # includes
             for r_index in range(i_index, (i_index + 1) + s_index):
                 if i_index + s_index > n - 1:
                     p_k = sum(key for key in keys[i_index:])
@@ -34,15 +33,13 @@ def min_avg_search_time(keys: list[float]) -> list[list[float]]:
             except (ValueError, IndexError):
                 continue
 
-    # print(results_arr)
     return results_arr
-    # return results_arr[0][n]
 
 
-keys = [0.2, 0.05, 0.17, 0.1, 0.2, 0.03, 0.25]
+bst_input = [0.2, 0.05, 0.17, 0.1, 0.2, 0.03, 0.25]
 
 
-final = min_avg_search_time(keys)
+final = min_avg_search_time(bst_input)
 
 for row in final:
     print(row)
