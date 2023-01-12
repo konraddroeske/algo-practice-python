@@ -4,34 +4,27 @@ def min_avg_search_time(keys: list[float]) -> list[list[float]]:
 
     for s_index in range(n):
         for i_index in range(n):
-            if i_index > n - 1:
-                break
+            if s_index + i_index > n - 1:
+                continue
 
             sub_problems = []
 
             for r_index in range(i_index, (i_index + 1) + s_index):
-                if i_index + s_index > n - 1:
-                    p_k = sum(key for key in keys[i_index:])
-                else:
-                    p_k = sum(key for key in keys[i_index : (i_index + 1) + s_index])
+                p_k = sum(key for key in keys[i_index : (i_index + 1) + s_index])
 
-                try:
-                    left_tree = results_arr[i_index][r_index - 1]
-                except IndexError:
+                if i_index > r_index - 1:
                     left_tree = 0
+                else:
+                    left_tree = results_arr[i_index][r_index - 1]
 
-                try:
-                    right_tree = results_arr[r_index + 1][i_index + s_index]
-                except IndexError:
+                if r_index + 1 > i_index + s_index:
                     right_tree = 0
+                else:
+                    right_tree = results_arr[r_index + 1][i_index + s_index]
 
                 sub_problems.append(p_k + left_tree + right_tree)
 
-            try:
-                min_val = min(sub_problems)
-                results_arr[i_index][i_index + s_index] = min_val
-            except (ValueError, IndexError):
-                continue
+            results_arr[i_index][i_index + s_index] = min(sub_problems)
 
     return results_arr
 
