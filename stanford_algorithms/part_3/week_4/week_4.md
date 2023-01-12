@@ -241,7 +241,7 @@ C(T) = sum (items i) p_i * [search time for i in T] <- depth of i in T + 1
 
 - Optimal Substructure Lemma: If T is an optimal BST for the key { 1, 2, ...,
   n } with root r, then its subtrees T_1 and T_2 are optimal BSTs for the 
-  key { 1, 2, ..., r - 1 }and { r + 1, ..., n }, respectively.
+  key { 1, 2, ..., r - 1 } and { r + 1, ..., n }, respectively.
 
 - Note: items in a sub-problem are either a prefix or a suffix of the 
   original problem.

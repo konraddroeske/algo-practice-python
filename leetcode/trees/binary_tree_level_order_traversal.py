@@ -1,3 +1,4 @@
+from collections import deque
 from typing import Optional
 
 
@@ -12,11 +13,11 @@ def level_order(root: Optional[Node]) -> list[list[int]]:
     if root is None:
         return []
 
-    levels = [[root]]
+    levels = deque([[root], ])
     values: list[list[int]] = [[root.val]]
 
     while levels:
-        cur_level = levels.pop(0)
+        cur_level = levels.popleft()
 
         next_level = []
 
