@@ -82,7 +82,72 @@
 - Sub-problems: compute L_i_v for al i in {0, 1, 2, ..., n - 1}
 
 - Let A = 2-D array (indexed by i and v)
-    - Base case:
+    - Base case: A[0, s] = 0; A[0, v] = +infinity for all v != s
+    - For i = 1, 2, 3, ..., n - 1
+        - For each v in V:
+            - case_1 = A[i - 1, v]
+            - case_2 = min (w, v) in E { A[i - 1, w] + c_w_v }
+            - A[i, v] = min(case_1, case_2) 
+    -  As discussed: if G has no negative cycle, then algorithm is correct.
+        - with final answers = A[n - 1, v]'s 
 
 
-The Basic Algorithm I - 6:30
+- Running Time: O(m * n)
+- In any directed graph, m is the sum of the in-degrees.
+
+- Optimizations:
+    - Stopping Early
+        - Suppose for some j < n - 1, A[j, v] = A[j - 1, v] for all vertices v
+        - for all v, all future A[i, v]'s will be the same
+        - can safely halt
+
+- Stopping Negative Cycles
+   - Question: What if the input graph G has a negative cycle? 
+       - want algorithm to report this fact
+   - Claim:
+       - G has no negative-cost cycle IFF in the (extended) Bellman_form 
+         algorithm, A[n - 1, v] = A[n, v] for all v in C (extra iteration)
+   - Consequence:
+       - can check for a negative cycle just by running Bellman-Ford for an 
+         extra iteration (running time still O(m * n))
+   - Edge case:
+        - If shortest path distances are NOT finite (if s has no outgoing 
+          arcs), then left hand side is false while right hand is satisfied
+        - G must have a negative cost cycle that is reachable from source 
+          vertex S
+    - Proof of Claim:
+        - Right Side: already proved in correctness of Bellman-Ford
+        - Left Side: Assume A[n - 1, v] = A[n, v] for all v in V
+            - assume also these are finite (< +infinity)
+        - Let d(v) denote the common value of A[n - 1, v] and A[n, v]
+        - Recall: A[n, v] = min (case_1, case_2)
+            - case_1 = A[n - 1, v]
+            - case_2 = min (w, v) in E { A[n - 1, w] + c_w_v }
+            - d(v) = A[n, v], d(w) = A[n - 1, w]
+        - Thus: d(v) <= d(w) + c_w_v for all edges (w, v) in E
+        - Equivalently: d(v) - d(w) <= c_w_v
+        - Now: consider an arbitrary cycle C 
+            - sum [(w, v) in C] c_w_v >= sum [(w, v) in C] (d(w) - d(v)) = 0
+
+
+- Space Optimization:
+    - Current space: O(n^2)
+        - O(1) for each n^2 sub-problems
+    - Predecessor Pointers
+        - All values we care about are from the last iteration
+        - We can throw out all previous rounds of sub-problems
+    - Note: only need the A[i - 1, v]'s to compute the A[i, v]'s
+        - Only need O(n) to remember the current and last rounds of sub-problems
+        - Only O(1) per destination
+    - Drawbacks
+        - If you want the optimal solution, and not just the value, then you 
+          need all data to reconstruct.
+    - Concern: without a filled-in table, how do we reconstruct the shortest 
+      paths?
+    - Idea:
+        - Compute a second table B, where B[i, v] = 2nd-to-last vertex on a 
+          shortest s -> v path with <= i edges. (or NULL if not such paths 
+          exist)
+            - "predecessor pointers"
+
+A Space Optimization - 6:10
