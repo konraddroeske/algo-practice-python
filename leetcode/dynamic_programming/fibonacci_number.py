@@ -6,6 +6,7 @@ def fib(n: int) -> int:
 
     return hash_table[n]
 
+
 def fib_arr(n: int) -> int:
     arr = [0, 1]
 
