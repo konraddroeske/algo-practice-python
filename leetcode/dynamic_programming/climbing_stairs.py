@@ -7,7 +7,16 @@ def climb_stairs(n: int) -> int:
     result = [1, 1]
 
     for step in range(2, n + 1):
-        result.append(result[step - 1] + result[step - 2])
+        result[0], result[1] = result[1], result[0] + result[1]
+
+    return result[-1]
+
+
+def climb_stairs_memory_optimized(n: int) -> int:
+    result = [1, 1]
+
+    for step in range(2, n + 1):
+        result[0], result[1] = result[1], result[0] + result[1]
 
     return result[-1]
 

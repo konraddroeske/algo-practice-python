@@ -149,5 +149,73 @@
           shortest s -> v path with <= i edges. (or NULL if not such paths 
           exist)
             - "predecessor pointers"
+    - Reconstruction: 
+        - Assume the input graph G has no negative cycles and we correctly 
+          compute the B[i, v]'s
+    - Then: tracing back predecessor pointers = the B[n - 1, v]'s - from v 
+      to s yields a shortest s-v path
+        - B[n - 1, v] = last hop of a shortest s-v path
+        - correctness from optimal substructure of shortest paths
 
-A Space Optimization - 6:10
+- Computing predecessor pointers:
+    - Recall:
+        - case_1 = A[i - 1, v]
+        - case_2 = min (w, v) in E { A[i - 1, w] + c_w_v }
+        - A[i, v] = min(case_1, case_2) 
+    - Base Case:
+        - B[0, v] = null for all v in V
+    - To compute B[i, v] with i > 0:
+        - if case_1, B[i, v] = B[i - v, v]
+        - if case_2, B[i, v] = the vertex w achieving the minimum (i.e., the 
+          new last hop)
+    - Correctness:
+        - computation of A[i, v] is brute-force search through the (1 + in-deg(v)
+          ) possible optimal solutions, B[i, v] is just caching the last hop of 
+          the winner.
+    - To reconstruct a negative-cost cycle:
+        - use DFS to check for a cycle of predecessor pointers after each 
+          round (must be a negative cost cycle).
+
+
+## All Pairs Shortest Paths
+
+- Input: directed graph G = (V, E) with edge costs c_e for each e in E.
+    - no distinguished source vertex
+- Goal:
+    - compute the length of a shortest u -> v path for all pairs of vertices 
+      u, v in V
+    - OR, correctly report that G contains a negative cycle
+- Running time (non-negative edge costs):
+    - n * Dijkstra = O(n * m *  log n)
+        - Sparse Graph: O(n^2 log n) if m = O(n)
+        - Dense Graph: O(n^3 log n) if m = O(n^2)
+- Running time (general edge costs):
+    - n * Bellman-Ford = O(n^2 * m)
+        - Sparse Graph: O(n^3) if m = O(n)
+        - Dense Graph: O(n^4) if m = O(n^2)
+
+
+- Floyd-Warshall Algorithm
+    - Running time: O(n^3) algorithm for all pairs shortest paths.
+    - Works even with graphs with negative edge lengths. 
+    - Thus: 
+        - (1) at least as good as n Bellman-Fords, better in dense graphs.
+        - (2) in graphs with non-negative edge costs, competitive with n 
+          Dijkstra's in dense graphs.
+    - Important Special Case:
+        - Transitive closure of a binary relation.
+        - i.e., all pairs reachability
+    - Open question:
+        - solve APSP significantly faster than O(n^3) in dense graphs?
+
+- Optimal Substructure:
+    - Recall: can be tricky to define ordering on sub-problems in graph 
+      problems.
+    - Key Idea: order the vertices V = {1, 2, 3, ..., n} arbitrarily.
+        - Let V(k) = {1, 2, ..., k}
+    - Lemma: Suppose G has no negative cycle. 
+        - Fix source i in V, destination j in V, and k in {1, 2, ..., k}
+        - Let P = shortest (cycle-free) i-j path with all internal nodes in V
+          (k).
+
+Optimal Substructure - 7:50
