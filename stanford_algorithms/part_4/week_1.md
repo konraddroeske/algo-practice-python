@@ -215,7 +215,61 @@
         - Let V(k) = {1, 2, ..., k}
     - Lemma: Suppose G has no negative cycle. 
         - Fix source i in V, destination j in V, and k in {1, 2, ..., k}
-        - Let P = shortest (cycle-free) i-j path with all internal nodes in V
-          (k).
+        - Let P = shortest (cycle-free) i-j path with all internal nodes in V(k).
+         
+- Optimal Substructure Lemma:
+    - Suppose G has no negative cost cycle. Let P be a shortest (cycle-free) 
+      i-j path with all internal nodes in V(k). Then:
+        - case_1: if k not internal to P, then P is a shortest (cycle-free) 
+          i-j path with all internal vertices in V(k-1)
+        - case_2: if k is internal to P, then: (i) -- p_1 --> (k) -- p_2 --> (j)
+            - p_1 = shortest (cycle-free) i-k path with all internal nodes 
+              in V(k-1) 
+            - p_2 = shortest (cycle-free) k-j path with all internal nodes 
+              in V(k-1)
+    - Proof: Similar to Bellman-Ford
 
-Optimal Substructure - 7:50
+### The Floyd-Warshall Algorithm
+
+- Setup: Let A = 3-D array (indexed by i, j, k)
+- Intent: A[i, j, k] = length of a shortest i-j path with all internal 
+  nodes in {1, 2, ..., k}
+- Base cases: 
+    - for all i, j in V, if k == 0:
+        - case_1 = 0 if i == j
+        - case_2 = c_ij if (i, j) share edge
+        - case_3 = +infinity if i != j and (i, j) do not share edge
+        - A[i, j, 0] = case_1 or case_2 or case_3
+- for k = 1 in n:
+    - for i = 1 to n:
+        - for j = 1 to n:
+            - case_1 = A[i, j, k - 1]
+            - case_2 = A[i, k, k - 1] + A[k, j, k - 1]
+            - A[i, j, k] = min(case_1, case_2)
+
+- Correctness: from optimal substructure + induction, as usual
+- Running Time: O(1) per sub-problem, O(n^3) overall 
+
+- What if input graph G has a negative cycle?
+    - Answer: will have A[i, i, n] < 0 for at least one i in V at the end of 
+      algorithm.
+- How to reconstruct a shortest i-j path?
+    - Answer: in addition to A, have Floyd-Warshall compute B[i, j] = max label of an internal node on a shortest i-j path for all i, j in V
+    - reset B[i, j] = k if 2nd case of recurrence used to compute A[i, j, k]
+    - Can use the B[i, j]'s to recursively construct shortest path:
+        - source = 23, destination = 17, max_label = 43 -> shortest path 23 
+          to 43, 43 to 17 
+        - continue until termination
+
+# Johnson's Algorithm
+
+- Recall: APSP reduces to n invocations of SSSP (Suitable Sub-routine for 
+  Single Source Problem).
+    - non-negative edge length: O(m * n log n) via Dijkstra
+    - general edge lengths: O(m * n^2) via Bellman-Ford
+
+- Johnson's Algorithm:
+    - 1 invocation of Bellman-Ford (O(m * n))
+    - n invocations of Dijksta's (O(n * m * log n))
+     
+A Re~~~~-weighting Technique - 8:48
