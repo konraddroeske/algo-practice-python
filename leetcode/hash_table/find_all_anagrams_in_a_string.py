@@ -1,4 +1,4 @@
-from collections import defaultdict, Counter
+from collections import Counter
 
 
 def find_anagrams(s: str, p: str) -> list[int]:
@@ -9,26 +9,16 @@ def find_anagrams(s: str, p: str) -> list[int]:
     p_count = Counter(p)
     s_count = Counter()
 
-    left = 0
-    right = 0
+    for right_index, char in enumerate(s):
+        s_count[char] += 1
 
-    while right <= len(s):
-        if right - left < len(p):
-            s_count[s[right]] += 1
-            right += 1
-            continue
+        left_index = right_index - len(p)
 
-        if p_count == s_count:
-            result.append(left)
+        if left_index >= 0:
+            s_count[s[left_index]] -= 1
 
-        s_count[s[left]] -= 1
-
-        if right < len(s):
-            s_count[s[right]] += 1
-
-        # move
-        left += 1
-        right += 1
+        if s_count == p_count:
+            result.append(left_index + 1)
 
     return result
 
