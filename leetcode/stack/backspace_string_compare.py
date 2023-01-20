@@ -20,7 +20,6 @@ def backspace_compare(s: str, t: str) -> bool:
 def backspace_compare_optimized(s: str, t: str) -> bool:
     counter_s = 0
     counter_t = 0
-
     pointer_s = len(s) - 1
     pointer_t = len(t) - 1
 
@@ -31,29 +30,21 @@ def backspace_compare_optimized(s: str, t: str) -> bool:
         if char_s == "#":
             counter_s += 1
             pointer_s -= 1
-            continue
-
-        if char_t == "#":
+        elif char_t == "#":
             counter_t += 1
             pointer_t -= 1
-            continue
-
-        if counter_s > 0:
+        elif counter_s > 0:
             counter_s -= 1
             pointer_s -= 1
-            continue
-
-        if counter_t > 0:
+        elif counter_t > 0:
             counter_t -= 1
             pointer_t -= 1
-            continue
+        else:
+            if char_s != char_t:
+                return False
 
-        # compare values
-        if char_s != char_t:
-            return False
-
-        pointer_s -= 1
-        pointer_t -= 1
+            pointer_s -= 1
+            pointer_t -= 1
 
     return True
 
