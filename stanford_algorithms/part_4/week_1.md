@@ -272,4 +272,56 @@
     - 1 invocation of Bellman-Ford (O(m * n))
     - n invocations of Dijksta's (O(n * m * log n))
      
-A Re~~~~-weighting Technique - 8:48
+- Re-weighting Technique
+    - Summary: re-weighting using vertex weights {p_v} adds the same amount 
+      (namely, (p_s - p_t)) to every s-t path.
+    - Consequence: re-weighting always leaves the shortest path unchanged.
+    - Why useful?
+        - G has some negative edge lengths.
+        - After re-weighting by some {p_v}, all edge lengths become 
+          non-negative!
+    - Question: do such weights always exist?
+        - If no negative edge lengths, then weights exist. Can we computed 
+          with Bellman-Ford algorithm!
+
+
+1. Add a ghost node (s) with path to every other node with length 0.
+    - Adding s does not add any new u-v paths for any u, v in G
+    - Key insight: Define vertex weight p_v := length of a shortest s-v path
+2. Calculate new lengths of edges 
+    - Recall: for each edge e = (u, v), define c'_e = c_e + p_v + p_v
+    - Note: after re-weighting, all edge lengths non-negative!
+3. Can compute all (re-weighted) shortest paths via n Dijkstra's computations.
+
+- Formal Definition
+    - Input: directed graph G = (V, E), general edge lengths c_e
+    1. Form G' by adding a new vertex s and a new edge (s, v)  with length 0 
+       for each v in G. 
+    2. Run Bellman-Ford on G' with source vertex s.
+        - If B-F detect negative-cost cycle in G' (which must lie in G) half and report this.
+    3. For each v in G, define p_v = length of a shortest s-v path in G'.     
+        - For each edge e = (u, v) in G, define c'_e = c_e + p_u - p_v
+    4. For each vertex of u of G:
+        - Run Dijkstra's algorithm in G, with edge lengths {c'_e}, with 
+          source vertex u, to compute the shortest-path distance d'(u, v) 
+          for each v in G.
+    5. Convert d(u, v) := d'(u, v) - p_u + p_v
+
+- Running time: O(n) + O(m * n) + O(m) + O(nm log n) + O(n^2)
+    = O(mn log n) (Step 4 dominates)
+    - Much better than Floyd_Warshall for sparse graphs O(n^3)
+    - Matches running time for when edge lengths were non-negative
+
+- Correctness:
+    - Claim: for every edge e = (u, v) of G, the re-weighted length c'_e = 
+      c_e + p_u - p_v is non-negative.
+    - Proof:
+        - fix an edge (u, v). By construction,
+        - p_u = length of a shortest s-u path in G'
+        - p_v = length of a shortest s-v path in G'
+        - Let P = a shortest s-u path in G' (with length p_u).
+            - exists by construction of G'
+        - Let P = a shortest s-u path in G' (with length p_u)
+            - p + (u, v) = an s-v path with length p_u + c_uv 
+            - shortest s-v path only shorter, so p_v <= p_u + c_uv
+            - c'_uv = c_uv + p_u - p_v >= 0
