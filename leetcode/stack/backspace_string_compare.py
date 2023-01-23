@@ -55,4 +55,4 @@ print(backspace_compare_optimized("a#c", "b"))  # false
 print(backspace_compare_optimized("y#fo##f", "y#f#o##f"))  # true
 
 print(backspace_compare_optimized("bxj##tw", "bxj###tw"))  # false
-print(backspace_compare_optimized("hd#dp#czsp#####", "hd#dp#czsp######"))  # true
+print(backspace_compare_optimized("hd#dp#czsp#####", "hd#dp#czsp######"))  # false
