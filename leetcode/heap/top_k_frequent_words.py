@@ -1,5 +1,5 @@
 from collections import Counter
-from heapq import heapify, heappush, heappop
+from heapq import heappush, heappop
 
 
 def top_k_frequent_words(words: list[str], k: int) -> list[str]:
