@@ -32,7 +32,7 @@
 ### The Bellman-Ford Algorithm
 
 - Goal: either,
-    - for all destinations v in V, compute the length of a shortest s-v  path
+    - for all destinations v in V, compute the length of a shortest s-v path
     - output a negative cycle
 
 - Optimal Substructure:
