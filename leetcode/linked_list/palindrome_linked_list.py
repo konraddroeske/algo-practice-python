@@ -24,7 +24,7 @@ def is_palindrome_mem_optimized(head: Optional[ListNode]) -> bool:
     fast = head
     slow = head
 
-    reversed_list = None
+    reversed_head = None
     length = 0
 
     while fast:
@@ -36,20 +36,19 @@ def is_palindrome_mem_optimized(head: Optional[ListNode]) -> bool:
             break
 
         next_node = slow.next
-        slow.next = reversed_list
-        reversed_list = slow
+        slow.next = reversed_head
+        reversed_head = slow
         slow = next_node
 
-    print("length", length)
     if length % 2 != 0:
         slow = slow.next
 
-    while slow and reversed_list:
-        if slow.val != reversed_list.val:
+    while slow and reversed_head:
+        if slow.val != reversed_head.val:
             return False
 
         slow = slow.next
-        reversed_list = reversed_list.next
+        reversed_head = reversed_head.next
 
     return True
 
