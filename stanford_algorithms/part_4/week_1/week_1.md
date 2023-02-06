@@ -281,7 +281,7 @@
         - After re-weighting by some {p_v}, all edge lengths become 
           non-negative!
     - Question: do such weights always exist?
-        - If no negative edge lengths, then weights exist. Can we computed 
+        - If no negative edge lengths, then weights exist. Can be computed 
           with Bellman-Ford algorithm!
 
 
