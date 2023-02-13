@@ -38,12 +38,33 @@ def odd_even_list(head: Optional[ListNode]) -> Optional[ListNode]:
 
     return head
 
-input_1 = ListNode(1, ListNode(2))
-# input_2 = ListNode(
-#     1, ListNode(2, ListNode(3, ListNode(4, ListNode(5, ListNode(6, ListNode(7))))))
-# )
 
-result = odd_even_list(input_1)
+def odd_even_list_optimized(head: Optional[ListNode]) -> Optional[ListNode]:
+    if not head or not head.next:
+        return head
+
+    odd = head
+    even = head.next
+    even_head = even
+
+    while even and even.next:
+        odd.next = even.next
+        odd = odd.next
+        even.next = odd.next
+        even = even.next
+
+    odd.next = even_head
+
+    return head
+
+
+input_1 = ListNode(1, ListNode(2))
+input_2 = ListNode(
+    1, ListNode(2, ListNode(3, ListNode(4, ListNode(5, ListNode(6, ListNode(7))))))
+)
+
+result = odd_even_list_optimized(input_2)
+# result = odd_even_list_optimized(input_1)
 
 while result:
     print("result", result.val)
