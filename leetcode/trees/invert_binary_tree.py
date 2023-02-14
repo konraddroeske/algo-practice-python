@@ -30,6 +30,19 @@ def invert_tree(root: TreeNode) -> TreeNode:
     return root
 
 
+def invert_tree_recursive(root: TreeNode) -> TreeNode:
+    if not root:
+        return root
+
+    right = invert_tree_recursive(root.right)
+    left = invert_tree_recursive(root.left)
+
+    root.right = left
+    root.left = right
+
+    return root
+
+
 root_1 = TreeNode(2, left=TreeNode(1), right=TreeNode(3))
 
 
