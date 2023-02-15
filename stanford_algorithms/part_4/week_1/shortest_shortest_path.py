@@ -1,8 +1,11 @@
 import math
+import multiprocessing
 from dataclasses import dataclass
+from functools import partial
 from typing import Optional
 
 from tqdm import tqdm
+from tqdm.contrib.concurrent import process_map
 
 
 @dataclass
@@ -33,21 +36,29 @@ class Edge:
 class Vertex:
     def __init__(self, val: int) -> None:
         self.val = val
-        self.edges = []
+        self.out_edges = []
+        self.in_edges = []
 
         self.vertex_reweighted: Optional[int] = None
+        self.distances: list[int] = []
 
     def __repr__(self) -> str:
-        return f"Vertex(val={self.val}, edges={self.edges})"
+        return (
+            f"Vertex(val={self.val}, out_edges={self.out_edges}, "
+            f"in_edges={self.in_edges})"
+        )
 
-    def add(self, edge: Edge) -> None:
-        self.edges.append(edge)
+    def add_out_edge(self, edge: Edge) -> None:
+        self.out_edges.append(edge)
+
+    def add_in_edge(self, edge: Edge) -> None:
+        self.in_edges.append(edge)
 
 
 input_vertices = []
 input_edges = []
 
-with open("./graph_1.txt") as f:
+with open("./graph_3.txt") as f:
     for index, line in enumerate(f):
         values = tuple(int(val) for val in str.split(line))
 
@@ -61,15 +72,20 @@ with open("./graph_1.txt") as f:
             tail, head, length = values
             new_edge = Edge(tail, head, length)
             input_edges.append(new_edge)
-            input_vertices[tail - 1].add(new_edge)
+            input_vertices[tail - 1].add_out_edge(new_edge)
+            input_vertices[head - 1].add_in_edge(new_edge)
 
+
+# print(input_vertices)
 
 source = Vertex(0)
 
 for vertex in input_vertices:
-    from_source = Edge(tail=0, head=vertex.val, length=0)
-    source.edges.append(from_source)
-    input_edges.append(from_source)
+    edge_from_source = Edge(tail=0, head=vertex.val, length=0)
+    source.add_out_edge(edge_from_source)
+    input_vertices[edge_from_source.head - 1].add_in_edge(edge_from_source)
+    input_edges.append(edge_from_source)
+
 
 input_vertices = [source] + input_vertices
 
@@ -95,11 +111,9 @@ def bellman_ford(
         for vertex_index, cur_vertex in enumerate(all_vertices):
             case_1 = arr[vertex_index][edge_index - 1]
 
-            # Optimize!
             other_paths = [
                 (edge.length + arr[edge.tail][edge_index - 1])
-                for edge in all_edges
-                if edge.head == cur_vertex.val
+                for edge in cur_vertex.in_edges
             ]
 
             case_2 = min(other_paths) if other_paths else 0
@@ -127,38 +141,44 @@ def bellman_ford(
     return final_vertices, final_edges
 
 
-def dijkstras_shortest_paths(
-    cur_source: Vertex, all_vertices: list[Vertex], all_edges: list[Edge]
-) -> list[int]:
+def dijkstras_shortest_path(all_vertices: list[Vertex], cur_source: Vertex) -> int:
     processed = {cur_source.val: cur_source}
+    outside_edges = [edge for edge in cur_source.out_edges]
     shortest_paths = {cur_source.val: 0}
 
-    while len(processed) != len(all_vertices):
-        # get all processed edges
-        processed_edges: list[Edge] = []
+    while len(processed) != len(all_vertices) and outside_edges:
+        min_outside_edge: Optional[tuple[Edge, int]] = None
 
-        for processed_vertex in processed.values():
-            processed_edges += processed_vertex.edges
-
-        # get edges without head in processed
-        outside_edges = [edge for edge in processed_edges if edge.head not in processed]
-
-        edges_with_new_distance: list[tuple[Edge, int]] = []
-
-        # calculate new distance for outside edges
+        # get min outside edge
         for outside_edge in outside_edges:
             new_distance = (
                 shortest_paths[outside_edge.tail] + outside_edge.length_reweighted
             )
-            edges_with_new_distance.append((outside_edge, new_distance))
+            cur_edge = (outside_edge, new_distance)
 
-        if not edges_with_new_distance:
+            if min_outside_edge is None:
+                min_outside_edge = cur_edge
+            else:
+                min_outside_edge = min(min_outside_edge, cur_edge, key=lambda x: x[1])
+
+        if min_outside_edge is None:
             break
 
         # get minimum distance
-        min_edge, min_distance = min(edges_with_new_distance, key=lambda x: x[1])
+        min_edge, min_distance = min_outside_edge
+
         # add vertex to processed
-        processed[min_edge.head] = all_vertices[min_edge.head - 1]
+        new_vertex = all_vertices[min_edge.head - 1]
+        processed[min_edge.head] = new_vertex
+
+        # remove inside edges
+        outside_edges = [edge for edge in outside_edges if edge.head not in processed]
+
+        # add new outside edges
+        for edge in new_vertex.out_edges:
+            if edge.head not in processed:
+                outside_edges.append(edge)
+
         # add min distance to shortest paths
         shortest_paths[min_edge.head] = min_distance
 
@@ -168,12 +188,13 @@ def dijkstras_shortest_paths(
     for vertex_val, distance in shortest_paths.items():
         final_distance = (
             distance
-            - source.vertex_reweighted
+            - cur_source.vertex_reweighted
             + all_vertices[vertex_val - 1].vertex_reweighted
         )
+
         final_distances.append(final_distance)
 
-    return final_distances
+    return min(final_distances) if final_distances else 0
 
 
 def get_shortest_shortest_path(
@@ -186,18 +207,14 @@ def get_shortest_shortest_path(
         return None
 
     print("Not a negative cycle, using Dijkstra's...")
-
     reweighted_vertices, reweighted_edges = result
 
     # Dijkstra's
-    paths = []
+    dijkstras_partial = partial(dijkstras_shortest_path, reweighted_vertices)
 
-    for cur_vertex in tqdm(reweighted_vertices):
-        paths += dijkstras_shortest_paths(
-            cur_vertex, reweighted_vertices, reweighted_edges
-        )
+    all_paths = process_map(dijkstras_partial, reweighted_vertices)
 
-    return min(paths)
+    return min(all_paths)
 
 
 print(get_shortest_shortest_path(input_vertices, input_edges))
