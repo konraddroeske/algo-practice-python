@@ -85,5 +85,4 @@ input_1 = TreeNode(
 target_1 = 8
 
 
-# path_sum(input_1, target_1)
-print(path_sum_iterative(input_1, target_1))
+path_sum(input_1, target_1)
