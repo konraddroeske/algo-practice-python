@@ -13,6 +13,7 @@
 - Step 1: Formulate Recurrence [optimal solution as a function of solutions 
   to "smaller" sub-problems] based on structure of an optimal solution.
     - Let S = a max-value solution to an instance of knapsack
+     
     - Case 1: suppose item n not in S.
       - S must be optimal with the first (n - 1) items (same capacity W)
       - If S* were better than S with response to 1st (n - 1) items, then 
