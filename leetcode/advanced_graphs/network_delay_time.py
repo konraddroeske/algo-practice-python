@@ -1,22 +1,20 @@
 import heapq
-from collections import defaultdict
-from typing import Optional
 
+
+# Time - O
 
 def network_delay_time(times: list[list[int]], n: int, k: int) -> int:
     # create adjacency list
-    graph: list[list[tuple[int, int]]] = [[] for _ in range(n + 1)]
+    graph: list[list[tuple[int, int]]] = [[] for _ in range(n + 1)] # O(n)
 
-    for time in times:
+    for time in times: # O(e)
         graph[time[0]].append((time[1], time[2]))
 
-    # distances at inf
-    distances: list[float | int] = [float("inf") for _ in range(n + 1)]
+    distances: list[float | int] = [float("inf") for _ in range(n + 1)] # O(n)
     distances[k] = 0
 
-    # priority queue by shortest distance
-    # greedy
-    min_heap: list[tuple[int, int]] = [(0, k)]
+    # Dijkstra w/ Min Heap
+    min_heap: list[tuple[int, int]] = [(0, k)] # O((n + e) * log n)
     heapq.heapify(min_heap)
 
     while min_heap:
